@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Stethoscope, Users, FileText, HelpCircle, Home, Menu, X, Upload, ChevronRight, LogIn, Activity, Layers } from 'lucide-react';
-import './LungEvity.css';
-import './LungEvityIcons.css';
+import './LungEvity.css'; // Import the CSS file
 
 const LungevityUI = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
-  const navigate = useNavigate();
   
   return (
     <div className="app">
@@ -26,10 +23,7 @@ const LungevityUI = () => {
             <a href="#" className="nav-link">For Doctors</a>
             <a href="#" className="nav-link">Research</a>
             <a href="#" className="nav-link">About Us</a>
-            <button 
-              className="sign-in-button"
-              onClick={() => navigate('/login')}
-            >
+            <button className="sign-in-button">
               <LogIn className="icon-sm" /> Sign In
             </button>
           </nav>
@@ -52,10 +46,7 @@ const LungevityUI = () => {
               <a href="#" className="mobile-nav-link">For Doctors</a>
               <a href="#" className="mobile-nav-link">Research</a>
               <a href="#" className="mobile-nav-link">About Us</a>
-              <button 
-                className="mobile-sign-in-button"
-                onClick={() => navigate('/login')}
-              >
+              <button className="mobile-sign-in-button">
                 <LogIn className="icon-sm" /> Sign In
               </button>
             </div>
