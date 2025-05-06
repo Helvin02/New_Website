@@ -3,7 +3,9 @@ import { Stethoscope, Users, FileText, HelpCircle, Home, Menu, X, Upload, Chevro
 import './LungEvity.css'; // Import the CSS file
 import './Login.css'; // Import login CSS
 import './Dashboard.css'; // Import dashboard CSS
+import './PatientRegistration.css'; // Import patient registration CSS
 import Login from './Login'; // Import Login component
+import PatientRegistration from './PatientRegistration'; // Import Patient Registration component
 import PatientDashboard from './PatientDashboard'; // Import Patient Dashboard
 import AdminDashboard from './AdminDashboard'; // Import Admin Dashboard
 
@@ -13,6 +15,7 @@ const LungevityUI = () => {
   
   // Authentication states
   const [showLogin, setShowLogin] = useState(false);
+  const [showRegistration, setShowRegistration] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState(null); // 'patient' or 'admin'
   const [username, setUsername] = useState('');
@@ -41,6 +44,23 @@ const LungevityUI = () => {
   // Close login modal
   const handleCloseLogin = () => {
     setShowLogin(false);
+  };
+  
+  // Open registration form
+  const handleRegisterClick = () => {
+    setShowLogin(false);
+    setShowRegistration(true);
+  };
+  
+  // Close registration form
+  const handleCloseRegistration = () => {
+    setShowRegistration(false);
+  };
+  
+  // Return to login from registration
+  const handleBackToLogin = () => {
+    setShowRegistration(false);
+    setShowLogin(true);
   };
   
   // If user is logged in, show the appropriate dashboard
@@ -385,7 +405,19 @@ const LungevityUI = () => {
       
       {/* Login Modal */}
       {showLogin && (
-        <Login onClose={handleCloseLogin} onLogin={handleLogin} />
+        <Login 
+          onClose={handleCloseLogin} 
+          onLogin={handleLogin} 
+          onRegister={handleRegisterClick}
+        />
+      )}
+      
+      {/* Patient Registration Modal */}
+      {showRegistration && (
+        <PatientRegistration 
+          onClose={handleCloseRegistration}
+          onBackToLogin={handleBackToLogin}
+        />
       )}
     </div>
   );
