@@ -1,5 +1,9 @@
 import React from 'react';
 import LungEvityUI from './LungEvityUI';
+import './App.css';
+import './Login.css';
+import './Dashboard.css';
+import './PatientRegistration.css';
 
 function App() {
   return (
