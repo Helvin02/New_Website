@@ -1,10 +1,56 @@
 import React, { useState } from 'react';
 import { Stethoscope, Users, FileText, HelpCircle, Home, Menu, X, Upload, ChevronRight, LogIn, Activity, Layers } from 'lucide-react';
 import './LungEvity.css'; // Import the CSS file
+import './Login.css'; // Import login CSS
+import './Dashboard.css'; // Import dashboard CSS
+import Login from './Login'; // Import Login component
+import PatientDashboard from './PatientDashboard'; // Import Patient Dashboard
+import AdminDashboard from './AdminDashboard'; // Import Admin Dashboard
 
 const LungevityUI = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
+  
+  // Authentication states
+  const [showLogin, setShowLogin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userType, setUserType] = useState(null); // 'patient' or 'admin'
+  const [username, setUsername] = useState('');
+  
+  // Handle login button click
+  const handleLoginClick = () => {
+    setShowLogin(true);
+    setIsMenuOpen(false); // Close mobile menu if open
+  };
+  
+  // Handle login form submission
+  const handleLogin = (type, user) => {
+    setIsLoggedIn(true);
+    setUserType(type);
+    setUsername(user);
+    setShowLogin(false);
+  };
+  
+  // Handle logout
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUserType(null);
+    setUsername('');
+  };
+  
+  // Close login modal
+  const handleCloseLogin = () => {
+    setShowLogin(false);
+  };
+  
+  // If user is logged in, show the appropriate dashboard
+  if (isLoggedIn) {
+    if (userType === 'patient') {
+      return <PatientDashboard username={username} onLogout={handleLogout} />;
+    } else if (userType === 'admin') {
+      return <AdminDashboard username={username} onLogout={handleLogout} />;
+    }
+  }
   
   return (
     <div className="app">
@@ -23,7 +69,7 @@ const LungevityUI = () => {
             <a href="#" className="nav-link">For Doctors</a>
             <a href="#" className="nav-link">Research</a>
             <a href="#" className="nav-link">About Us</a>
-            <button className="sign-in-button">
+            <button className="sign-in-button" onClick={handleLoginClick}>
               <LogIn className="icon-sm" /> Sign In
             </button>
           </nav>
@@ -46,7 +92,7 @@ const LungevityUI = () => {
               <a href="#" className="mobile-nav-link">For Doctors</a>
               <a href="#" className="mobile-nav-link">Research</a>
               <a href="#" className="mobile-nav-link">About Us</a>
-              <button className="mobile-sign-in-button">
+              <button className="mobile-sign-in-button" onClick={handleLoginClick}>
                 <LogIn className="icon-sm" /> Sign In
               </button>
             </div>
@@ -61,10 +107,10 @@ const LungevityUI = () => {
             <h2 className="hero-title">Transforming Lung Cancer Detection and Care</h2>
             <p className="hero-description">Advanced AI-powered diagnostics paired with emotional support for patients and clinical decision support for healthcare professionals.</p>
             <div className="hero-buttons">
-              <button className="hero-button-primary">
+              <button className="hero-button-primary" onClick={handleLoginClick}>
                 Patient Portal
               </button>
-              <button className="hero-button-secondary">
+              <button className="hero-button-secondary" onClick={handleLoginClick}>
                 Healthcare Professional Access
               </button>
             </div>
@@ -336,6 +382,11 @@ const LungevityUI = () => {
           </div>
         </div>
       </section>
+      
+      {/* Login Modal */}
+      {showLogin && (
+        <Login onClose={handleCloseLogin} onLogin={handleLogin} />
+      )}
     </div>
   );
 };
