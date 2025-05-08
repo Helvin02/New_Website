@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, FileText, Calendar, MessageCircle, LogOut, Home, Upload, Clock, Users, ChevronRight, Activity, X, Camera, CheckCircle } from 'lucide-react';
+import { User, FileText, Calendar, MessageCircle, LogOut, Home, Upload, Clock, Users, ChevronRight, Activity, X, Camera, CheckCircle, Layers } from 'lucide-react';
 import './Dashboard.css';
 
 const PatientDashboard = ({ username, onLogout }) => {
@@ -26,6 +26,15 @@ const PatientDashboard = ({ username, onLogout }) => {
     { id: 2, doctor: 'Dr. James Rodriguez', type: 'Follow-up CT Scan', date: 'June 2, 2025', time: '9:00 AM - 10:00 AM' }
   ];
   
+  // Mock patient data
+  const patientInfo = {
+    name: 'Robert Johnson',
+    id: 'PAT-2023-8642',
+    age: '54 years',
+    scanDate: 'May 3, 2025',
+    clinicalNotes: 'Patient presents with persistent cough for 3 months. Former smoker (2 packs/day for 20 years, quit 5 years ago). Family history of lung cancer.'
+  };
+  
   const handleUpload = (e) => {
     e.preventDefault();
     // Simulate upload process
@@ -48,6 +57,7 @@ const PatientDashboard = ({ username, onLogout }) => {
           <button 
             className={`sidebar-item ${activeTab === 'home' ? 'active' : ''}`}
             onClick={() => setActiveTab('home')}
+            type="button"
           >
             <Home className="sidebar-icon" />
             <span>Home</span>
@@ -55,6 +65,7 @@ const PatientDashboard = ({ username, onLogout }) => {
           <button 
             className={`sidebar-item ${activeTab === 'appointments' ? 'active' : ''}`}
             onClick={() => setActiveTab('appointments')}
+            type="button"
           >
             <Calendar className="sidebar-icon" />
             <span>Book Doctor</span>
@@ -62,6 +73,7 @@ const PatientDashboard = ({ username, onLogout }) => {
           <button 
             className={`sidebar-item ${activeTab === 'scans' ? 'active' : ''}`}
             onClick={() => setActiveTab('scans')}
+            type="button"
           >
             <Upload className="sidebar-icon" />
             <span>CT Scans</span>
@@ -69,6 +81,7 @@ const PatientDashboard = ({ username, onLogout }) => {
           <button 
             className={`sidebar-item ${activeTab === 'history' ? 'active' : ''}`}
             onClick={() => setActiveTab('history')}
+            type="button"
           >
             <Clock className="sidebar-icon" />
             <span>Recent Uploads</span>
@@ -76,13 +89,14 @@ const PatientDashboard = ({ username, onLogout }) => {
           <button 
             className={`sidebar-item ${activeTab === 'contact' ? 'active' : ''}`}
             onClick={() => setActiveTab('contact')}
+            type="button"
           >
             <MessageCircle className="sidebar-icon" />
             <span>Contact Doctor</span>
           </button>
         </div>
         <div className="sidebar-footer">
-          <button className="logout-button" onClick={onLogout}>
+          <button className="logout-button" onClick={onLogout} type="button">
             <LogOut className="sidebar-icon" />
             <span>Logout</span>
           </button>
@@ -91,7 +105,7 @@ const PatientDashboard = ({ username, onLogout }) => {
       
       <div className="dashboard-content">
         <div className="dashboard-topbar">
-          <h2>Patient Portal</h2>
+          <h2>Patient Platform</h2>
           <div className="user-info">
             <div className="user-avatar">
               <User className="avatar-icon" />
@@ -104,7 +118,7 @@ const PatientDashboard = ({ username, onLogout }) => {
           {activeTab === 'home' && (
             <>
               <div className="welcome-card">
-                <h1>Welcome to Your Patient Portal</h1>
+                <h1>Welcome to Your Patient Platform</h1>
                 <p>Your health information and resources are available here. View your test results, upcoming appointments, and health recommendations all in one place.</p>
               </div>
               
@@ -132,6 +146,7 @@ const PatientDashboard = ({ username, onLogout }) => {
                     <button 
                       className="action-button" 
                       onClick={() => setActiveTab('appointments')}
+                      type="button"
                     >
                       Schedule Appointment
                     </button>
@@ -162,6 +177,7 @@ const PatientDashboard = ({ username, onLogout }) => {
                     <button 
                       className="action-button"
                       onClick={() => setShowUploadModal(true)}
+                      type="button"
                     >
                       Upload New Scan
                     </button>
@@ -211,7 +227,7 @@ const PatientDashboard = ({ username, onLogout }) => {
                       <h3>{doctor.name}</h3>
                       <p className="doctor-specialty">{doctor.specialty}</p>
                       <p className="doctor-availability">{doctor.availability}</p>
-                      <button className="book-button">Book Appointment</button>
+                      <button className="book-button" type="button">Book Appointment</button>
                     </div>
                   </div>
                 ))}
@@ -233,8 +249,8 @@ const PatientDashboard = ({ username, onLogout }) => {
                           <p>{appointment.time}</p>
                         </div>
                         <div className="appointment-list-actions">
-                          <button className="reschedule-button">Reschedule</button>
-                          <button className="cancel-button">Cancel</button>
+                          <button className="reschedule-button" type="button">Reschedule</button>
+                          <button className="cancel-button" type="button">Cancel</button>
                         </div>
                       </div>
                     ))
@@ -249,16 +265,118 @@ const PatientDashboard = ({ username, onLogout }) => {
           {activeTab === 'scans' && (
             <>
               <div className="page-header">
-                <h1>CT Scan Upload</h1>
-                <p>Upload your CT scan images for analysis by our AI system.</p>
+                <h1>CT Scan Analysis</h1>
+                <p>View and analyze your CT scan results with our AI-powered platform.</p>
               </div>
               
-              <div className="upload-container">
-                <div className="upload-box" onClick={() => setShowUploadModal(true)}>
-                  <Upload className="upload-icon-large" />
-                  <h3>Upload CT Scan</h3>
-                  <p>Click to upload your scan files</p>
-                  <p className="upload-formats">Accepted formats: DICOM, NIFTI, JPEG, PNG</p>
+              <div className="main-header">
+                <h3 className="main-title">CT Scan Results</h3>
+                <button type="button" className="upload-button" onClick={() => setShowUploadModal(true)}>
+                  <Upload className="icon-sm" /> Upload New Scan
+                </button>
+              </div>
+              
+              <div className="scan-grid">
+                {/* Scan Viewer */}
+                <div className="scan-viewer">
+                  <img 
+                    src="/api/placeholder/400/400" 
+                    alt="CT Scan" 
+                    className="scan-image" 
+                  />
+                </div>
+                
+                {/* Analysis Results */}
+                <div className="analysis-container">
+                  <h4 className="analysis-title">AI Analysis Results</h4>
+                  
+                  <div className="analysis-content">
+                    <div className="analysis-section">
+                      <div className="probability-header">
+                        <span className="probability-label">Cancer Probability</span>
+                        <span className="probability-value">68%</span>
+                      </div>
+                      <div className="progress-container">
+                        <div className="progress-bar" style={{width: '68%'}}></div>
+                      </div>
+                    </div>
+                    
+                    <div className="section-divider">
+                      <h5 className="section-subtitle">Detected Abnormalities</h5>
+                      <ul className="abnormality-list">
+                        <li className="abnormality-item">
+                          <ChevronRight className="abnormality-icon icon-sm" />
+                          <div className="abnormality-content">
+                            <p className="abnormality-title">Nodule detected in right upper lobe</p>
+                            <p className="abnormality-details">Size: 1.8cm x 1.4cm, Irregular borders</p>
+                          </div>
+                        </li>
+                        <li className="abnormality-item">
+                          <ChevronRight className="abnormality-icon warning icon-sm" />
+                          <div className="abnormality-content">
+                            <p className="abnormality-title">Ground-glass opacity</p>
+                            <p className="abnormality-details">Left lower lobe, 4.2mm diameter</p>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    
+                    <div className="section-divider">
+                      <h5 className="section-subtitle">Recommended Actions</h5>
+                      <ul className="action-list">
+                        <li className="action-item">
+                          <Activity className="action-icon icon-sm" />
+                          Schedule follow-up scan in 30 days
+                        </li>
+                        <li className="action-item">
+                          <Activity className="action-icon icon-sm" />
+                          Consider biopsy of right upper lobe nodule
+                        </li>
+                        <li className="action-item">
+                          <Activity className="action-icon icon-sm" />
+                          Refer to pulmonary specialist
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div className="analysis-actions">
+                    <button type="button" className="primary-button">
+                      View Detailed Report
+                    </button>
+                    <button type="button" className="secondary-button">
+                      Consult Doctor
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="patient-info">
+                <h4 className="patient-title">Your Information</h4>
+                <div className="patient-card">
+                  <div className="patient-grid">
+                    <div className="patient-field">
+                      <p className="field-label">Patient Name</p>
+                      <p className="field-value">{patientInfo.name}</p>
+                    </div>
+                    <div className="patient-field">
+                      <p className="field-label">Patient ID</p>
+                      <p className="field-value">{patientInfo.id}</p>
+                    </div>
+                    <div className="patient-field">
+                      <p className="field-label">Age</p>
+                      <p className="field-value">{patientInfo.age}</p>
+                    </div>
+                    <div className="patient-field">
+                      <p className="field-label">Scan Date</p>
+                      <p className="field-value">{patientInfo.scanDate}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="patient-notes">
+                    <p className="notes-label">Clinical Notes</p>
+                    <p className="notes-text">{patientInfo.clinicalNotes}</p>
+                  </div>
                 </div>
               </div>
               
@@ -324,8 +442,8 @@ const PatientDashboard = ({ username, onLogout }) => {
                           </td>
                           <td>
                             <div className="table-actions">
-                              <button className="table-action-button">View Results</button>
-                              <button className="table-action-button">Download</button>
+                              <button className="table-action-button" type="button">View Results</button>
+                              <button className="table-action-button" type="button">Download</button>
                             </div>
                           </td>
                         </tr>
@@ -341,6 +459,7 @@ const PatientDashboard = ({ username, onLogout }) => {
                   <button 
                     className="action-button"
                     onClick={() => setShowUploadModal(true)}
+                    type="button"
                   >
                     Upload CT Scan
                   </button>
@@ -370,8 +489,8 @@ const PatientDashboard = ({ username, onLogout }) => {
                         <h4>Dr. Sarah Miller</h4>
                         <p>Pulmonology</p>
                         <div className="contact-actions">
-                          <button className="contact-action-button">Message</button>
-                          <button className="contact-action-button">Call</button>
+                          <button className="contact-action-button" type="button">Message</button>
+                          <button className="contact-action-button" type="button">Call</button>
                         </div>
                       </div>
                     </div>
@@ -383,8 +502,8 @@ const PatientDashboard = ({ username, onLogout }) => {
                         <h4>Dr. James Rodriguez</h4>
                         <p>Oncology</p>
                         <div className="contact-actions">
-                          <button className="contact-action-button">Message</button>
-                          <button className="contact-action-button">Call</button>
+                          <button className="contact-action-button" type="button">Message</button>
+                          <button className="contact-action-button" type="button">Call</button>
                         </div>
                       </div>
                     </div>
@@ -413,8 +532,8 @@ const PatientDashboard = ({ username, onLogout }) => {
                       <textarea id="message" name="message" rows="5" placeholder="Type your message here..."></textarea>
                     </div>
                     <div className="form-actions">
-                      <button className="cancel-button">Cancel</button>
-                      <button className="send-button">Send Message</button>
+                      <button className="cancel-button" type="button">Cancel</button>
+                      <button className="send-button" type="button">Send Message</button>
                     </div>
                   </div>
                 </div>
@@ -458,7 +577,7 @@ const PatientDashboard = ({ username, onLogout }) => {
           <div className="modal-container">
             <div className="modal-header">
               <h2>Upload CT Scan</h2>
-              <button className="close-button" onClick={() => setShowUploadModal(false)}>
+              <button className="close-button" onClick={() => setShowUploadModal(false)} type="button">
                 <X className="icon-sm" />
               </button>
             </div>
