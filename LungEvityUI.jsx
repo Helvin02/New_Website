@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Stethoscope, Users, FileText, HelpCircle, Home, Menu, X, Upload, ChevronRight, LogIn, Activity, Layers } from 'lucide-react';
 import './LungEvity.css'; // Import the CSS file
 import './Login.css'; // Import login CSS
@@ -20,6 +20,30 @@ const LungevityUI = () => {
   const [userType, setUserType] = useState(null); // 'patient' or 'admin'
   const [username, setUsername] = useState('');
   
+  // Check if user was previously logged in
+  useEffect(() => {
+    const savedSession = JSON.parse(localStorage.getItem('lungEvitySession') || 'null');
+    if (savedSession) {
+      setIsLoggedIn(true);
+      setUserType(savedSession.userType);
+      setUsername(savedSession.username);
+    }
+    
+    // Initialize demo admin account if it doesn't exist
+    const users = JSON.parse(localStorage.getItem('lungEvityUsers') || '[]');
+    const adminExists = users.some(user => user.email === 'admin@lungevity.com');
+    if (!adminExists) {
+      users.push({
+        username: 'Admin',
+        email: 'admin@lungevity.com',
+        password: 'admin123',
+        userType: 'admin',
+        registeredAt: new Date().toISOString()
+      });
+      localStorage.setItem('lungEvityUsers', JSON.stringify(users));
+    }
+  }, []);
+  
   // Handle login button click
   const handleLoginClick = () => {
     setShowLogin(true);
@@ -32,6 +56,10 @@ const LungevityUI = () => {
     setUserType(type);
     setUsername(user);
     setShowLogin(false);
+    
+    // Save session to localStorage
+    const session = { userType: type, username: user };
+    localStorage.setItem('lungEvitySession', JSON.stringify(session));
   };
   
   // Handle logout
@@ -39,6 +67,9 @@ const LungevityUI = () => {
     setIsLoggedIn(false);
     setUserType(null);
     setUsername('');
+    
+    // Remove session from localStorage
+    localStorage.removeItem('lungEvitySession');
   };
   
   // Close login modal
@@ -89,7 +120,7 @@ const LungevityUI = () => {
             <a href="#" className="nav-link">For Doctors</a>
             <a href="#" className="nav-link">Research</a>
             <a href="#" className="nav-link">About Us</a>
-            <button className="sign-in-button" onClick={handleLoginClick}>
+            <button className="sign-in-button" onClick={handleLoginClick} type="button">
               <LogIn className="icon-sm" /> Sign In
             </button>
           </nav>
@@ -98,6 +129,7 @@ const LungevityUI = () => {
           <button 
             className="mobile-menu-button"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            type="button"
           >
             {isMenuOpen ? <X className="icon" /> : <Menu className="icon" />}
           </button>
@@ -112,7 +144,7 @@ const LungevityUI = () => {
               <a href="#" className="mobile-nav-link">For Doctors</a>
               <a href="#" className="mobile-nav-link">Research</a>
               <a href="#" className="mobile-nav-link">About Us</a>
-              <button className="mobile-sign-in-button" onClick={handleLoginClick}>
+              <button className="mobile-sign-in-button" onClick={handleLoginClick} type="button">
                 <LogIn className="icon-sm" /> Sign In
               </button>
             </div>
@@ -127,10 +159,10 @@ const LungevityUI = () => {
             <h2 className="hero-title">Transforming Lung Cancer Detection and Care</h2>
             <p className="hero-description">Advanced AI-powered diagnostics paired with emotional support for patients and clinical decision support for healthcare professionals.</p>
             <div className="hero-buttons">
-              <button className="hero-button-primary" onClick={handleLoginClick}>
+              <button className="hero-button-primary" onClick={handleLoginClick} type="button">
                 Patient Portal
               </button>
-              <button className="hero-button-secondary" onClick={handleLoginClick}>
+              <button className="hero-button-secondary" onClick={handleLoginClick} type="button">
                 Healthcare Professional Access
               </button>
             </div>
@@ -210,24 +242,28 @@ const LungevityUI = () => {
               <div className="dashboard-sidebar">
                 <div className="sidebar-nav">
                   <button 
+                    type="button"
                     className={`sidebar-nav-button ${activeTab === 'dashboard' ? 'active' : ''}`}
                     onClick={() => setActiveTab('dashboard')}
                   >
                     <Home className="icon-sm" /> Dashboard
                   </button>
                   <button 
+                    type="button"
                     className={`sidebar-nav-button ${activeTab === 'patients' ? 'active' : ''}`}
                     onClick={() => setActiveTab('patients')}
                   >
                     <Users className="icon-sm" /> Patients
                   </button>
                   <button 
+                    type="button"
                     className={`sidebar-nav-button ${activeTab === 'scans' ? 'active' : ''}`}
                     onClick={() => setActiveTab('scans')}
                   >
                     <Layers className="icon-sm" /> CT Scans
                   </button>
                   <button 
+                    type="button"
                     className={`sidebar-nav-button ${activeTab === 'reports' ? 'active' : ''}`}
                     onClick={() => setActiveTab('reports')}
                   >
@@ -240,7 +276,7 @@ const LungevityUI = () => {
               <div className="dashboard-main">
                 <div className="main-header">
                   <h3 className="main-title">CT Scan Analysis</h3>
-                  <button className="upload-button">
+                  <button type="button" className="upload-button">
                     <Upload className="icon-sm" /> Upload New Scan
                   </button>
                 </div>
@@ -310,10 +346,10 @@ const LungevityUI = () => {
                     </div>
                     
                     <div className="analysis-actions">
-                      <button className="primary-button">
+                      <button type="button" className="primary-button">
                         Generate Detailed Report
                       </button>
-                      <button className="secondary-button">
+                      <button type="button" className="secondary-button">
                         Second Opinion
                       </button>
                     </div>
