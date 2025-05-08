@@ -2,9 +2,68 @@ import React, { useState } from 'react';
 import { Layers, Shield, UserPlus, Users, CheckCircle, ArrowRight, Lock, Mail, User } from 'lucide-react';
 import './Login.css';
 
-const Login = () => {
+const Login = ({ onClose, onLogin, onRegister }) => {
   const [activeTab, setActiveTab] = useState('patient');
   const [isLogin, setIsLogin] = useState(true);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+    // Clear error when user types
+    if (error) setError('');
+  };
+
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    
+    // Basic validation
+    if (!formData.email.trim() || !formData.password.trim()) {
+      setError('Please enter both email and password');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    // Check if we're logging in as admin (for demo purposes)
+    if (activeTab === 'doctor' && formData.email === 'admin@lungevity.com' && formData.password === 'admin123') {
+      setTimeout(() => {
+        setIsSubmitting(false);
+        onLogin('admin', 'Admin');  // Log in as admin
+      }, 1000);
+      return;
+    }
+
+    // Get users from localStorage
+    const users = JSON.parse(localStorage.getItem('lungEvityUsers') || '[]');
+    
+    // Find user by email and password
+    const user = users.find(user => 
+      user.email === formData.email && 
+      user.password === formData.password && 
+      (activeTab === 'patient' ? user.userType === 'patient' : user.userType === 'doctor')
+    );
+    
+    setTimeout(() => {
+      setIsSubmitting(false);
+      
+      if (user) {
+        // Login successful
+        onLogin(user.userType, user.username);
+      } else {
+        // Login failed
+        setError('Invalid email or password');
+      }
+    }, 1000);
+  };
 
   return (
     <div className="login-page">
@@ -80,7 +139,19 @@ const Login = () => {
           
           {/* Login Form */}
           {isLogin ? (
-            <form className="login-form">
+            <form className="login-form" onSubmit={handleLoginSubmit}>
+              {error && (
+                <div style={{ 
+                  padding: '0.75rem', 
+                  backgroundColor: '#fee2e2', 
+                  color: '#dc2626', 
+                  borderRadius: '0.375rem',
+                  marginBottom: '1rem'
+                }}>
+                  {error}
+                </div>
+              )}
+              
               <div className="form-group">
                 <label className="form-label">Email</label>
                 <div style={{ position: 'relative' }}>
@@ -95,6 +166,9 @@ const Login = () => {
                   />
                   <input 
                     type="email" 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     className="form-input" 
                     placeholder="name@example.com" 
                     style={{ paddingLeft: '40px' }}
@@ -116,6 +190,9 @@ const Login = () => {
                   />
                   <input 
                     type="password" 
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
                     className="form-input" 
                     placeholder="••••••••"
                     style={{ paddingLeft: '40px' }}
@@ -124,19 +201,36 @@ const Login = () => {
                 <a href="#" className="form-forgot-password">Forgot password?</a>
               </div>
               
-              <button type="submit" className="form-button">
-                Sign in
+              <button 
+                type="submit" 
+                className="form-button"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Signing in...' : 'Sign in'}
               </button>
               
               <div className="form-register">
                 Don't have an account?
                 <a href="#" className="form-register-link" onClick={(e) => {
                   e.preventDefault();
-                  setIsLogin(false);
+                  onRegister();
                 }}>
                   Create account
                 </a>
               </div>
+
+              {activeTab === 'doctor' && (
+                <div style={{ 
+                  marginTop: '1rem', 
+                  padding: '0.75rem',
+                  backgroundColor: '#dbeafe',
+                  borderRadius: '0.375rem',
+                  fontSize: '0.875rem',
+                  color: '#1e40af'
+                }}>
+                  <strong>Healthcare Professional Demo:</strong> Use admin@lungevity.com / admin123
+                </div>
+              )}
             </form>
           ) : (
             /* Registration Form */
@@ -234,7 +328,14 @@ const Login = () => {
                 </label>
               </div>
               
-              <button type="submit" className="form-button">
+              <button 
+                type="button" 
+                className="form-button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onRegister();
+                }}
+              >
                 Create Account
               </button>
               
