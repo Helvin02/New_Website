@@ -177,6 +177,7 @@ const LungevityUI = () => {
         </div>
       </section>
       
+      {/* Rest of the component remains unchanged */}
       {/* Features Section */}
       <section className="features-section">
         <div className="container">
@@ -242,30 +243,30 @@ const LungevityUI = () => {
               <div className="dashboard-sidebar">
                 <div className="sidebar-nav">
                   <button 
-                    type="button"
                     className={`sidebar-nav-button ${activeTab === 'dashboard' ? 'active' : ''}`}
                     onClick={() => setActiveTab('dashboard')}
+                    type="button"
                   >
                     <Home className="icon-sm" /> Dashboard
                   </button>
                   <button 
-                    type="button"
                     className={`sidebar-nav-button ${activeTab === 'patients' ? 'active' : ''}`}
                     onClick={() => setActiveTab('patients')}
+                    type="button"
                   >
                     <Users className="icon-sm" /> Patients
                   </button>
                   <button 
-                    type="button"
                     className={`sidebar-nav-button ${activeTab === 'scans' ? 'active' : ''}`}
                     onClick={() => setActiveTab('scans')}
+                    type="button"
                   >
                     <Layers className="icon-sm" /> CT Scans
                   </button>
                   <button 
-                    type="button"
                     className={`sidebar-nav-button ${activeTab === 'reports' ? 'active' : ''}`}
                     onClick={() => setActiveTab('reports')}
+                    type="button"
                   >
                     <FileText className="icon-sm" /> Reports
                   </button>
