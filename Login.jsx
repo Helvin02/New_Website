@@ -65,9 +65,14 @@ const Login = ({ onClose, onLogin, onRegister }) => {
     }, 1000);
   };
 
+  // Prevent click propagation from modal content to overlay
+  const handleModalContentClick = (e) => {
+    e.stopPropagation();
+  };
+
   return (
-    <div className="login-page">
-      <div className="login-container">
+    <div className="login-overlay" onClick={onClose}>
+      <div className="login-container" onClick={handleModalContentClick}>
         {/* Left Side Information Panel */}
         <div className="login-info">
           <div className="login-info-overlay"></div>
