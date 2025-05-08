@@ -70,8 +70,37 @@ const PatientRegistration = ({ onClose, onBackToLogin }) => {
     if (validateForm()) {
       setIsSubmitting(true);
       
-      // Here you would typically make an API call to register the user
-      // For demo purposes, we'll just simulate a successful registration after a short delay
+      // Save user to localStorage
+      const existingUsers = JSON.parse(localStorage.getItem('lungEvityUsers') || '[]');
+      
+      // Check if username or email already exists
+      const existingUser = existingUsers.find(
+        user => user.username === formData.username || user.email === formData.email
+      );
+      
+      if (existingUser) {
+        setIsSubmitting(false);
+        if (existingUser.username === formData.username) {
+          setErrors({ ...errors, username: 'Username already exists' });
+        } else {
+          setErrors({ ...errors, email: 'Email already exists' });
+        }
+        return;
+      }
+      
+      // Add new user
+      const newUser = {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        userType: 'patient',
+        registeredAt: new Date().toISOString()
+      };
+      
+      existingUsers.push(newUser);
+      localStorage.setItem('lungEvityUsers', JSON.stringify(existingUsers));
+      
+      // Simulate a successful registration after a short delay
       setTimeout(() => {
         setIsSubmitting(false);
         setRegistrationSuccess(true);
