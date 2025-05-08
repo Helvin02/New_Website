@@ -113,12 +113,17 @@ const PatientRegistration = ({ onClose, onBackToLogin }) => {
     }
   };
   
+  // Prevent click propagation from modal content to overlay
+  const handleModalContentClick = (e) => {
+    e.stopPropagation();
+  };
+  
   return (
-    <div className="registration-overlay">
-      <div className="registration-container">
+    <div className="registration-overlay" onClick={onClose}>
+      <div className="registration-container" onClick={handleModalContentClick}>
         <div className="registration-header">
           <h2>Create Patient Account</h2>
-          <button className="close-button" onClick={onClose}>
+          <button className="close-button" onClick={onClose} type="button">
             <X className="icon-sm" />
           </button>
         </div>
@@ -213,7 +218,7 @@ const PatientRegistration = ({ onClose, onBackToLogin }) => {
             </form>
             
             <div className="back-to-login">
-              <button className="back-button" onClick={onBackToLogin}>
+              <button className="back-button" onClick={onBackToLogin} type="button">
                 <ArrowLeft className="icon-sm" /> Back to Login
               </button>
             </div>
