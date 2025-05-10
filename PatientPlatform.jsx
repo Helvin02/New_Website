@@ -4,16 +4,13 @@ import {
   Users, 
   Layers, 
   FileText, 
-  Settings, 
-  HelpCircle, 
-  LogOut, 
-  User, 
   Upload,
   ChevronRight,
   Activity
 } from 'lucide-react';
 
 const PatientPlatform = () => {
+  // Rest of the component remains the same
   const [activeTab, setActiveTab] = useState('scans');
   
   const handleTabClick = (tab) => {
