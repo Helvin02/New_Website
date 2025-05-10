@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { User, FileText, Calendar, MessageCircle, LogOut, Home, Upload, Clock, Users, ChevronRight, Activity, X, Camera, CheckCircle, Layers } from 'lucide-react';
+import { User, FileText, Calendar, MessageCircle, LogOut, Home, Upload, Clock, ChevronRight, Activity, X, Camera, CheckCircle, Layers } from 'lucide-react';
 import './Dashboard.css';
+import './PatientPlatformIntegration.css';
+import PatientPlatform from './PatientPlatform';
+import './Platform.css'; // Import platform CSS
+import SimplifiedPatientPlatform from './SimplifiedPatientPlatform'; // Import the new component
 
 const PatientDashboard = ({ username, onLogout }) => {
   const [activeTab, setActiveTab] = useState('home');
@@ -50,6 +54,7 @@ const PatientDashboard = ({ username, onLogout }) => {
   return (
     <div className="dashboard-wrapper">
       <div className="dashboard-sidebar">
+        {/* Sidebar code stays the same */}
         <div className="sidebar-header">
           <h2 className="dashboard-logo">LungEvity</h2>
         </div>
@@ -78,6 +83,15 @@ const PatientDashboard = ({ username, onLogout }) => {
             <Upload className="sidebar-icon" />
             <span>CT Scans</span>
           </button>
+          {/* Platform tab */}
+          <button 
+            className={`sidebar-item ${activeTab === 'platform' ? 'active' : ''}`}
+            onClick={() => setActiveTab('platform')}
+            type="button"
+          >
+            <Layers className="sidebar-icon" />
+            <span>CT Scan Platform</span>
+          </button>
           <button 
             className={`sidebar-item ${activeTab === 'history' ? 'active' : ''}`}
             onClick={() => setActiveTab('history')}
@@ -105,7 +119,7 @@ const PatientDashboard = ({ username, onLogout }) => {
       
       <div className="dashboard-content">
         <div className="dashboard-topbar">
-          <h2>Patient Platform</h2>
+        <h2>{activeTab === 'platform' ? 'CT Scan Platform' : 'Patient Platform'}</h2>
           <div className="user-info">
             <div className="user-avatar">
               <User className="avatar-icon" />
@@ -210,7 +224,9 @@ const PatientDashboard = ({ username, onLogout }) => {
             </>
           )}
           
-          {activeTab === 'appointments' && (
+          {activeTab === 'platform' && (
+            <SimplifiedPatientPlatform/>
+          )}
             <>
               <div className="page-header">
                 <h1>Book a Doctor</h1>
@@ -260,156 +276,163 @@ const PatientDashboard = ({ username, onLogout }) => {
                 </div>
               </div>
             </>
-          )}
           
-          {activeTab === 'scans' && (
-            <>
-              <div className="page-header">
-                <h1>CT Scan Analysis</h1>
-                <p>View and analyze your CT scan results with our AI-powered platform.</p>
-              </div>
-              
-              <div className="main-header">
-                <h3 className="main-title">CT Scan Results</h3>
-                <button type="button" className="upload-button" onClick={() => setShowUploadModal(true)}>
-                  <Upload className="icon-sm" /> Upload New Scan
-                </button>
-              </div>
-              
-              <div className="scan-grid">
-                {/* Scan Viewer */}
-                <div className="scan-viewer">
-                  <img 
-                    src="/api/placeholder/400/400" 
-                    alt="CT Scan" 
-                    className="scan-image" 
-                  />
+          
+            {activeTab === 'scans' && (
+  <>
+    <div className="page-header">
+      <h1>CT Scan Analysis</h1>
+      <p>View and analyze your CT scan results with our AI-powered platform.</p>
+    </div>
+    
+    <div className="main-header">
+      <h3 className="main-title">CT Scan Results</h3>
+      <button type="button" className="upload-button" onClick={() => setShowUploadModal(true)}>
+        <Upload className="icon-sm" /> Upload New Scan
+      </button>
+    </div>
+    
+    <div className="scan-grid">
+      {/* Scan Viewer */}
+      <div className="scan-viewer">
+        <img 
+          src="/api/placeholder/400/400" 
+          alt="CT Scan" 
+          className="scan-image" 
+        />
+      </div>
+      
+      {/* Analysis Results */}
+      <div className="analysis-container">
+        <h4 className="analysis-title">AI Analysis Results</h4>
+        
+        <div className="analysis-content">
+          <div className="analysis-section">
+            <div className="probability-header">
+              <span className="probability-label">Cancer Probability</span>
+              <span className="probability-value">68%</span>
+            </div>
+            <div className="progress-container">
+              <div className="progress-bar" style={{width: '68%'}}></div>
+            </div>
+          </div>
+          
+          <div className="section-divider">
+            <h5 className="section-subtitle">Detected Abnormalities</h5>
+            <ul className="abnormality-list">
+              <li className="abnormality-item">
+                <ChevronRight className="abnormality-icon icon-sm" />
+                <div className="abnormality-content">
+                  <p className="abnormality-title">Nodule detected in right upper lobe</p>
+                  <p className="abnormality-details">Size: 1.8cm x 1.4cm, Irregular borders</p>
                 </div>
-                
-                {/* Analysis Results */}
-                <div className="analysis-container">
-                  <h4 className="analysis-title">AI Analysis Results</h4>
-                  
-                  <div className="analysis-content">
-                    <div className="analysis-section">
-                      <div className="probability-header">
-                        <span className="probability-label">Cancer Probability</span>
-                        <span className="probability-value">68%</span>
-                      </div>
-                      <div className="progress-container">
-                        <div className="progress-bar" style={{width: '68%'}}></div>
-                      </div>
-                    </div>
-                    
-                    <div className="section-divider">
-                      <h5 className="section-subtitle">Detected Abnormalities</h5>
-                      <ul className="abnormality-list">
-                        <li className="abnormality-item">
-                          <ChevronRight className="abnormality-icon icon-sm" />
-                          <div className="abnormality-content">
-                            <p className="abnormality-title">Nodule detected in right upper lobe</p>
-                            <p className="abnormality-details">Size: 1.8cm x 1.4cm, Irregular borders</p>
-                          </div>
-                        </li>
-                        <li className="abnormality-item">
-                          <ChevronRight className="abnormality-icon warning icon-sm" />
-                          <div className="abnormality-content">
-                            <p className="abnormality-title">Ground-glass opacity</p>
-                            <p className="abnormality-details">Left lower lobe, 4.2mm diameter</p>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                    
-                    <div className="section-divider">
-                      <h5 className="section-subtitle">Recommended Actions</h5>
-                      <ul className="action-list">
-                        <li className="action-item">
-                          <Activity className="action-icon icon-sm" />
-                          Schedule follow-up scan in 30 days
-                        </li>
-                        <li className="action-item">
-                          <Activity className="action-icon icon-sm" />
-                          Consider biopsy of right upper lobe nodule
-                        </li>
-                        <li className="action-item">
-                          <Activity className="action-icon icon-sm" />
-                          Refer to pulmonary specialist
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  
-                  <div className="analysis-actions">
-                    <button type="button" className="primary-button">
-                      View Detailed Report
-                    </button>
-                    <button type="button" className="secondary-button">
-                      Consult Doctor
-                    </button>
-                  </div>
+              </li>
+              <li className="abnormality-item">
+                <ChevronRight className="abnormality-icon warning icon-sm" />
+                <div className="abnormality-content">
+                  <p className="abnormality-title">Ground-glass opacity</p>
+                  <p className="abnormality-details">Left lower lobe, 4.2mm diameter</p>
                 </div>
-              </div>
-              
-              <div className="patient-info">
-                <h4 className="patient-title">Your Information</h4>
-                <div className="patient-card">
-                  <div className="patient-grid">
-                    <div className="patient-field">
-                      <p className="field-label">Patient Name</p>
-                      <p className="field-value">{patientInfo.name}</p>
-                    </div>
-                    <div className="patient-field">
-                      <p className="field-label">Patient ID</p>
-                      <p className="field-value">{patientInfo.id}</p>
-                    </div>
-                    <div className="patient-field">
-                      <p className="field-label">Age</p>
-                      <p className="field-value">{patientInfo.age}</p>
-                    </div>
-                    <div className="patient-field">
-                      <p className="field-label">Scan Date</p>
-                      <p className="field-value">{patientInfo.scanDate}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="patient-notes">
-                    <p className="notes-label">Clinical Notes</p>
-                    <p className="notes-text">{patientInfo.clinicalNotes}</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="dashboard-card full-width">
-                <h3>Upload Guidelines</h3>
-                <div className="guidelines-content">
-                  <div className="guideline-item">
-                    <h4>File Requirements</h4>
-                    <ul className="guideline-list">
-                      <li>Files must be in DICOM, NIFTI, JPEG, or PNG format</li>
-                      <li>Maximum file size: 100MB per file</li>
-                      <li>For optimal analysis, DICOM format is preferred</li>
-                    </ul>
-                  </div>
-                  <div className="guideline-item">
-                    <h4>Processing Time</h4>
-                    <ul className="guideline-list">
-                      <li>Initial AI analysis typically takes 5-10 minutes</li>
-                      <li>Specialist review may take up to 24 hours</li>
-                      <li>You will receive a notification when results are ready</li>
-                    </ul>
-                  </div>
-                  <div className="guideline-item">
-                    <h4>Privacy Information</h4>
-                    <ul className="guideline-list">
-                      <li>All uploads are encrypted and stored securely</li>
-                      <li>Only authorized healthcare providers have access to your scans</li>
-                      <li>You can delete your uploaded scans at any time</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </>
+              </li>
+            </ul>
+          </div>
+          
+          <div className="section-divider">
+            <h5 className="section-subtitle">Recommended Actions</h5>
+            <ul className="action-list">
+              <li className="action-item">
+                <Activity className="action-icon icon-sm" />
+                Schedule follow-up scan in 30 days
+              </li>
+              <li className="action-item">
+                <Activity className="action-icon icon-sm" />
+                Consider biopsy of right upper lobe nodule
+              </li>
+              <li className="action-item">
+                <Activity className="action-icon icon-sm" />
+                Refer to pulmonary specialist
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div className="analysis-actions">
+          <button type="button" className="primary-button">
+            View Detailed Report
+          </button>
+          <button type="button" className="secondary-button">
+            Consult Doctor
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div className="patient-info">
+      <h4 className="patient-title">Your Information</h4>
+      <div className="patient-card">
+        <div className="patient-grid">
+          <div className="patient-field">
+            <p className="field-label">Patient Name</p>
+            <p className="field-value">{patientInfo.name}</p>
+          </div>
+          <div className="patient-field">
+            <p className="field-label">Patient ID</p>
+            <p className="field-value">{patientInfo.id}</p>
+          </div>
+          <div className="patient-field">
+            <p className="field-label">Age</p>
+            <p className="field-value">{patientInfo.age}</p>
+          </div>
+          <div className="patient-field">
+            <p className="field-label">Scan Date</p>
+            <p className="field-value">{patientInfo.scanDate}</p>
+          </div>
+        </div>
+        
+        <div className="patient-notes">
+          <p className="notes-label">Clinical Notes</p>
+          <p className="notes-text">{patientInfo.clinicalNotes}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div className="dashboard-card full-width">
+      <h3>Upload Guidelines</h3>
+      <div className="guidelines-content">
+        <div className="guideline-item">
+          <h4>File Requirements</h4>
+          <ul className="guideline-list">
+            <li>Files must be in DICOM, NIFTI, JPEG, or PNG format</li>
+            <li>Maximum file size: 100MB per file</li>
+            <li>For optimal analysis, DICOM format is preferred</li>
+          </ul>
+        </div>
+        <div className="guideline-item">
+          <h4>Processing Time</h4>
+          <ul className="guideline-list">
+            <li>Initial AI analysis typically takes 5-10 minutes</li>
+            <li>Specialist review may take up to 24 hours</li>
+            <li>You will receive a notification when results are ready</li>
+          </ul>
+        </div>
+        <div className="guideline-item">
+          <h4>Privacy Information</h4>
+          <ul className="guideline-list">
+            <li>All uploads are encrypted and stored securely</li>
+            <li>Only authorized healthcare providers have access to your scans</li>
+            <li>You can delete your uploaded scans at any time</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </>
+)}
+          
+          {/* New Tab Content: Patient Platform */}
+          {activeTab === 'platform' && (
+            <div className="patientplatform-wrapper">
+              <PatientPlatform />
+            </div>
           )}
           
           {activeTab === 'history' && (
